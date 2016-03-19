@@ -1,0 +1,75 @@
+{% load cache %}
+{% load i18n %}
+{% load static from staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{% static "bootstrap-3.3.4/css/bootstrap.css" %}">
+    <link rel="stylesheet" href="{% static "bootstrap-3.3.4/css/bootstrap-theme.css" %}">
+    <script src="{% static "bootstrap-3.3.4/js/jquery-1.11.3.min.js" %}"></script>
+    <script src="{% static "bootstrap-3.3.4/js/bootstrap.min.js" %}"></script>
+
+
+    <title>StockNews https://s.liantian.me</title>
+
+</head>
+<body>
+<div class="container">
+
+ <div class="row col-xs-4 col-xs-offset-4">
+<form action="" method="POST"  id="sign-in-form" role="form">
+        {% csrf_token %}
+        {% for field in sif %}
+            <div class="form-group">{{ field }}</div>
+        {% endfor %}
+{#        <label class="checkbox">#}
+{#          <input type="checkbox" value="remember" name="remember"> {% trans "Remember me" %}#}
+{#        </label>#}
+        <button class="btn btn-lg btn-default btn-block" type="submit" id="sign-in-button">{% trans "登陆 !"%}</button>
+<a class="btn btn-lg btn-default btn-block" href="/accounts/reguser/" >注册新用户</a>
+      </form>
+
+</div>
+
+
+
+</div>
+
+
+</body>
+<script language="JavaScript">
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+function sameOrigin(url) {
+    // test that a given url is a same-origin URL
+    // url could be relative or scheme relative or absolute
+    var host = document.location.host; // host + port
+    var protocol = document.location.protocol;
+    var sr_origin = '//' + host;
+    var origin = protocol + sr_origin;
+    // Allow absolute or scheme relative URLs to same origin
+    return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+        (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+        // or any other URL that isn't scheme relative or absolute i.e relative.
+        !(/^(\/\/|http:|https:).*/.test(url));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+            // Send the token to same-origin, relative URLs only.
+            // Send the token only if the method warrants CSRF protection
+            // Using the CSRFToken value acquired earlier
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+</script>
+</html>
